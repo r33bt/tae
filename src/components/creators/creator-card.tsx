@@ -1,7 +1,8 @@
 ﻿import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ExternalLink, Youtube, Globe } from "lucide-react"
+import { Youtube, Globe } from "lucide-react"
+import Link from "next/link"
 import type { Creator } from "@/types"
 
 interface CreatorCardProps {
@@ -9,12 +10,18 @@ interface CreatorCardProps {
 }
 
 export function CreatorCard({ creator }: CreatorCardProps) {
+  const creatorSlug = creator.handle.replace('@', '').toLowerCase()
+  
   return (
-    <Card className="h-full">
+    <Card className="h-full hover:shadow-lg transition-shadow">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
-            <CardTitle className="text-xl">{creator.name}</CardTitle>
+            <Link href={`/creators/${creatorSlug}`} className="hover:text-blue-600 transition-colors">
+              <CardTitle className="text-xl">
+                {creator.name}
+              </CardTitle>
+            </Link>
             <CardDescription className="text-sm opacity-70">
               {creator.handle}
             </CardDescription>
