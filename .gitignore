@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Test files with sensitive data
+clean-test.js
+test-*.js
+*.test.js
