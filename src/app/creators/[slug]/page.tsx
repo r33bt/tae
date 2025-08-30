@@ -44,8 +44,9 @@ async function getContentForCreator(creatorId: number) {
   return data || []
 }
 
-export default async function CreatorPage({ params }: { params: { slug: string } }) {
-  const creator = await getCreatorBySlug(params.slug)
+export default async function CreatorPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const creator = await getCreatorBySlug(slug)
   
   if (!creator) {
     notFound()

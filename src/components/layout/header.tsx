@@ -15,8 +15,8 @@ export function Header() {
               Creators
             </Link>
             <Link href="/content" className="text-sm font-medium hover:underline">
-              Tutorials
-            </Link>
+  Tutorials
+</Link>
             <Link href="/communities" className="text-sm font-medium hover:underline">
               Communities
             </Link>

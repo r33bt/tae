@@ -1,5 +1,6 @@
 ﻿import { getCreators } from "@/lib/database"
 import { CreatorCard } from "@/components/creators/creator-card"
+import { NewsletterSignup } from "@/components/newsletter/newsletter-signup"
 
 export default async function HomePage() {
   const creators = await getCreators()
