@@ -10,6 +10,7 @@ export function NewsletterSignup() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,6 +18,7 @@ export function NewsletterSignup() {
 
     setLoading(true)
     setError("")
+    setMessage("")
 
     try {
       const response = await fetch('/api/newsletter', {
@@ -32,10 +34,9 @@ export function NewsletterSignup() {
 
       if (response.ok) {
         setSubmitted(true)
+        setMessage(result.message || "Please check your email to verify your subscription")
         setEmail("")
-        setTimeout(() => setSubmitted(false), 8000)
       } else {
-        // Show the specific error from the API
         setError(result.error || `Error ${response.status}: Failed to subscribe`)
       }
     } catch (error) {
@@ -48,11 +49,27 @@ export function NewsletterSignup() {
 
   if (submitted) {
     return (
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-blue-200 bg-blue-50">
         <CardContent className="text-center py-8">
-          <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-green-800 mb-2">Welcome to TAE!</h3>
-          <p className="text-green-700">You'll receive our weekly roundup of validated AI tutorials.</p>
+          <Mail className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-blue-800 mb-2">Check Your Email!</h3>
+          <p className="text-blue-700 mb-4">
+            {message}
+          </p>
+          <p className="text-xs text-blue-600 mb-4">
+            Don't see it? Check your spam folder or try again with a different email.
+          </p>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => {
+              setSubmitted(false)
+              setMessage("")
+              setError("")
+            }}
+          >
+            Try Different Email
+          </Button>
         </CardContent>
       </Card>
     )
@@ -82,7 +99,7 @@ export function NewsletterSignup() {
             />
             <Button type="submit" disabled={!email.trim() || loading}>
               {loading ? (
-                "Joining..."
+                "Sending..."
               ) : (
                 <>
                   Join <ArrowRight className="w-4 h-4 ml-1" />
