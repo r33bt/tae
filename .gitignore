@@ -44,3 +44,14 @@ next-env.d.ts
 clean-test.js
 test-*.js
 *.test.js
+
+# Security - Never commit these
+.env*
+!.env.example
+*.key
+*-key.*
+api-keys.txt
+secrets.*
+config/keys.*
+test-*.js
+clean-*.js
