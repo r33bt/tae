@@ -1,20 +1,22 @@
-﻿"use client"
+"use client"
 
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, Mail, ArrowRight } from "lucide-react"
+import { CheckCircle, Mail, ArrowRight, AlertCircle } from "lucide-react"
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.trim()) return
 
     setLoading(true)
+    setError("")
 
     try {
       const response = await fetch('/api/newsletter', {
@@ -25,16 +27,20 @@ export function NewsletterSignup() {
         body: JSON.stringify({ email })
       })
 
+      const result = await response.json()
+      console.log('API Response:', { status: response.status, result })
+
       if (response.ok) {
         setSubmitted(true)
         setEmail("")
         setTimeout(() => setSubmitted(false), 8000)
       } else {
-        throw new Error('Failed to subscribe')
+        // Show the specific error from the API
+        setError(result.error || `Error ${response.status}: Failed to subscribe`)
       }
     } catch (error) {
-      console.error('Error subscribing:', error)
-      alert('Failed to subscribe. Please try again.')
+      console.error('Network error:', error)
+      setError('Network error. Please check your connection and try again.')
     } finally {
       setLoading(false)
     }
@@ -84,6 +90,13 @@ export function NewsletterSignup() {
               )}
             </Button>
           </div>
+          
+          {error && (
+            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md">
+              <AlertCircle className="w-4 h-4 text-red-500" />
+              <span className="text-sm text-red-700">{error}</span>
+            </div>
+          )}
           
           <div className="text-xs text-muted-foreground text-center">
             ✅ No spam • ✅ Weekly AI tutorials • ✅ Unsubscribe anytime
